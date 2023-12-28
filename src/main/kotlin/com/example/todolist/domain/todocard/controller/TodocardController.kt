@@ -1,5 +1,6 @@
 package com.example.todolist.domain.todocard.controller
 
+import com.example.todolist.domain.exception.ModelNotFoundException
 import com.example.todolist.domain.todocard.dto.CreateTodocardRequest
 import com.example.todolist.domain.todocard.dto.TodocardResponse
 import com.example.todolist.domain.todocard.dto.UpdateTodocardRequest
@@ -45,9 +46,18 @@ class TodocardController(
     }
 
     @DeleteMapping("/{todocardId}")
-    fun deleteTodocard(@PathVariable todocardId: Long): ResponseEntity<Unit>{
+    fun deleteTodocard(
+        @PathVariable todocardId: Long
+    ): ResponseEntity<Unit>{
         return ResponseEntity
             .status(HttpStatus.NO_CONTENT)
+            .build()
+    }
+
+    @ExceptionHandler(ModelNotFoundException::class)
+    fun handleModelNotFoundException(e: ModelNotFoundException): ResponseEntity<Unit> {
+        return ResponseEntity
+            .status(HttpStatus.NOT_FOUND)
             .build()
     }
 

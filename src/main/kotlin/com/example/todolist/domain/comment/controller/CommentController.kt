@@ -3,35 +3,62 @@ package com.example.todolist.domain.comment.controller
 import com.example.todolist.domain.comment.dto.CommentResponse
 import com.example.todolist.domain.comment.dto.CreatCommentRequest
 import com.example.todolist.domain.comment.dto.UpdateCommentRequest
+import com.example.todolist.domain.todocard.dto.UpdateTodocardRequest
+import com.example.todolist.domain.todocard.service.TodocardService
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
-@RequestMapping("/todocards/{todocard}/comments")
+@RequestMapping("/todocards/{todocardId}/comments")
 @RestController
-class CommentController {
+class CommentController(
+    private val todocardService: TodocardService
+) {
 
     @GetMapping
-    fun getCommentList():ResponseEntity<List<CommentResponse>>{
-        TODO()
+    fun getCommentList(@PathVariable todocardId: Long):ResponseEntity<List<CommentResponse>>{
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(todocardService.getCommentList(todocardId))
     }
 
     @GetMapping("/{commentId}")
-    fun getComment(@PathVariable commentId: Long){
-        TODO()
+    fun getComment(
+        @PathVariable todocardId: Long,
+        @PathVariable commentId: Long
+    ):ResponseEntity<CommentResponse>{
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(todocardService.getComment(todocardId, commentId))
     }
 
     @PostMapping
-    fun createComment(@RequestBody createCommentRequest: CreatCommentRequest): ResponseEntity<CommentResponse>{
-        TODO()
+    fun createComment(
+        @PathVariable todocardId: Long,
+        @RequestBody createCommentRequest: CreatCommentRequest
+    ): ResponseEntity<CommentResponse>{
+        return ResponseEntity
+            .status(HttpStatus.CREATED)
+            .body(todocardService.addComment(todocardId, createCommentRequest))
     }
 
     @PutMapping("/{commentId}")
-    fun updateComment(@PathVariable commentId: Long, @RequestBody updateCommentRequest: UpdateCommentRequest): ResponseEntity<CommentResponse>{
-        TODO()
+    fun updateComment(
+        @PathVariable todocardId: Long,
+        @PathVariable commentId: Long,
+        @RequestBody updateCommentRequest: UpdateCommentRequest
+    ): ResponseEntity<CommentResponse>{
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(todocardService.updateComment(todocardId, commentId, updateCommentRequest))
     }
 
     @DeleteMapping("/{commentId}")
-    fun deleteComment(@PathVariable commentId: Long){
-        TODO()
+    fun deleteComment(
+        @PathVariable commentId: Long
+    ): ResponseEntity<Unit>{
+        return ResponseEntity
+            .status(HttpStatus.NO_CONTENT)
+            .build()
     }
 }
