@@ -10,7 +10,9 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-class TodocardImpl: TodocardService {
+class TodocardImpl(
+
+): TodocardService{
     override fun getAllTodocardList(): List<TodocardResponse> {
         //TODO: DB에서 모든 Todocard의 목록을 조회(Entity)하여 TodocardResponse(DTO) 목록으로 변환 후 반환
         TODO("Not yet implemented")
