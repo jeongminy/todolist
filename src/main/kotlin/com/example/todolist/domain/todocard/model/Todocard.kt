@@ -1,6 +1,7 @@
 package com.example.todolist.domain.todocard.model
 
 import com.example.todolist.domain.comment.model.Comment
+import com.example.todolist.domain.todocard.dto.TodocardResponse
 import jakarta.persistence.*
 import java.time.LocalDateTime
 
@@ -24,6 +25,13 @@ class Todocard(
     @Column(name="author")
     val author: String,
 
+){
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    var id: Long? = null
+
+
     @OneToMany(
         mappedBy = "comment",
         fetch = FetchType.LAZY,
@@ -31,10 +39,15 @@ class Todocard(
         orphanRemoval = true)
     var comment: MutableList<Comment> = mutableListOf()
 
-){
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long? = null
-
 }
+
+fun Todocard.toResponse(): TodocardResponse {
+    return TodocardResponse(
+        id = id!!,
+        title = title,
+        description = description,
+        status = status == TodocardStatus.COMPLETE,
+        author = author
+    )
+}
+

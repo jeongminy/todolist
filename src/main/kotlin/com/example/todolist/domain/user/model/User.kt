@@ -1,5 +1,6 @@
 package com.example.todolist.domain.user.model
 
+import com.example.todolist.domain.user.dto.UserResponse
 import jakarta.persistence.*
 
 @Entity
@@ -21,4 +22,12 @@ class User(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
 
+}
+
+fun User.toResponse(): UserResponse {
+    return UserResponse(
+        id = id!!,
+        nickname = profile.nickname,
+        email = email,
+    )
 }
