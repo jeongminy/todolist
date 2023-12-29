@@ -3,7 +3,6 @@ package com.example.todolist.domain.todocard.service
 import com.example.todolist.domain.comment.dto.CommentResponse
 import com.example.todolist.domain.comment.dto.CreatCommentRequest
 import com.example.todolist.domain.comment.dto.UpdateCommentRequest
-import com.example.todolist.domain.exception.ModelNotFoundException
 import com.example.todolist.domain.todocard.dto.CreateTodocardRequest
 import com.example.todolist.domain.todocard.dto.TodocardResponse
 import com.example.todolist.domain.todocard.dto.UpdateTodocardRequest
