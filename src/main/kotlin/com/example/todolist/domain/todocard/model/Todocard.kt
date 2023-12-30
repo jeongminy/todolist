@@ -37,7 +37,13 @@ class Todocard(
         fetch = FetchType.LAZY,
         cascade = [CascadeType.ALL],
         orphanRemoval = true)
-    var comment: MutableList<Comment> = mutableListOf()
+    var comments: MutableList<Comment> = mutableListOf()
+
+
+
+    fun removeComment(comment: Comment) {
+        comments.remove(comment)
+    }
 
 }
 

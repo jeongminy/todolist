@@ -3,6 +3,8 @@ package com.example.todolist.domain.todocard.service
 import com.example.todolist.domain.comment.dto.CommentResponse
 import com.example.todolist.domain.comment.dto.CreatCommentRequest
 import com.example.todolist.domain.comment.dto.UpdateCommentRequest
+import com.example.todolist.domain.comment.model.Comment
+import com.example.todolist.domain.comment.model.toResponse
 import com.example.todolist.domain.comment.repository.CommentRepository
 import com.example.todolist.domain.exception.ModelNotFoundException
 import com.example.todolist.domain.todocard.dto.CreateTodocardRequest
@@ -22,20 +24,15 @@ import java.time.LocalDateTime
 class TodocardImpl(
     private val todocardRepository: TodocardRepository,
     private val commentRepository: CommentRepository,
-    private val userRepository: UserRepository
 ): TodocardService{
 
     override fun getAllTodocardList(): List<TodocardResponse> {
         return todocardRepository.findAll().map{it.toResponse()}
-        //TODO: DB에서 모든 Todocard의 목록을 조회(Entity)하여 TodocardResponse(DTO) 목록으로 변환 후 반환
-        //TODO("Not yet implemented")
     }
 
     override fun getTodocardById(todocardId: Long): TodocardResponse {
         val todocard = todocardRepository.findByIdOrNull(todocardId) ?: throw ModelNotFoundException("todocard",todocardId)
-        //TODO: 만약 todocardId에 해당하는 Course가 없다면 throw ModelNotFoundException
-        //TODO: DB에서 Id기반으로 Todocard를 가져와서 TodocardResponse 목록으로 변환 후 반환
-        TODO("Not yet implemented")
+        return todocard.toResponse()
         //throw ModelNotFoundException(modelName="Todocard", id = 1L)
     }
 
@@ -54,16 +51,21 @@ class TodocardImpl(
 
     @Transactional
     override fun updateTodocard(todocardId: Long, request: UpdateTodocardRequest): TodocardResponse {
-        //TODO: 만약 todocardId에 해당하는 Course가 없다면 throw ModelNotFoundException
-        //TODO: DB에서 todocardId에 해당하는 Todocard(Entity)를 가져와서 request기반으로 업데이트 후 DB에 저장, 결과를 TodocardResponse(DTO)로 변환 후 반환
-        TODO("Not yet implemented")
+        val todocard = todocardRepository.findByIdOrNull(todocardId) ?: throw ModelNotFoundException("todocard", todocardId)
+
+        val (title, description, status) = request
+
+        todocard.title = title
+        todocard.description = description
+        todocard.status = status
+
+        return todocardRepository.save(todocard).toResponse()
     }
 
     @Transactional
-    override fun deleteTodocard(todocardId: Long): TodocardResponse {
-        //TODO: 만약 todocardId에 해당하는 Course가 없다면 throw ModelNotFoundException
-        //TODO: DB에서 todocardId에 해당하는 Todocard를 삭제 (한 row를 삭제), 연관된 comment도 모두 삭제
-        TODO("Not yet implemented")
+    override fun deleteTodocard(todocardId: Long) {
+        val todocard = todocardRepository.findByIdOrNull(todocardId) ?: throw ModelNotFoundException("todocard", todocardId)
+        todocardRepository.delete(todocard)
     }
 
 
@@ -72,42 +74,44 @@ class TodocardImpl(
 
 
     override fun getCommentList(todocardId: Long): List<CommentResponse> {
-        // TODO: 만약 todocardId 해당하는 todocard가 없다면 throw ModelNotFoundException
-        // TODO: DB에서 todocardId에 해당하는 todocard목록을 가져오고, 하위 comment들을 가져온 다음, CommentResopnse로 변환해서 반환
-
-        TODO("Not yet implemented")
+        val todocard = todocardRepository.findByIdOrNull(todocardId) ?: throw ModelNotFoundException("todocard", todocardId)
+        return todocard.comments.map {it.toResponse()}
     }
 
     override fun getComment(todocardId: Long, commentId: Long): CommentResponse {
-        // TODO: 만약 todocardId, commentId에 해당하는 Comment가 없다면 throw ModelNotFoundException
-        // TODO: DB에서 todocardId, commentId에 해당하는 Comment를 가져와서 CommentResponse로 변환 후 반환
+        val todocard = todocardRepository.findByIdOrNull(todocardId) ?: throw ModelNotFoundException("todocard", todocardId)
+        val comment = commentRepository.findByTodocardIdAndId(todocardId, commentId) ?: throw ModelNotFoundException("Comment", commentId)
 
-        TODO("Not yet implemented")
+        return comment.toResponse()
     }
 
     @Transactional
     override fun addComment(todocardId: Long, request: CreatCommentRequest): CommentResponse {
-        // TODO: 만약 todocardId에 해당하는 todocard가 없다면 throw ModelNotFoundException
-        // TODO: DB에서 todocardId에 해당하는 todocard를 가져와서 Comment를 추가 후 DB에 저장, 결과를을 CommentResponse로 변환 후 반환
+        val todocard = todocardRepository.findByIdOrNull(todocardId) ?: throw ModelNotFoundException("todocard", todocardId)
 
-        TODO("Not yet implemented")
+        val comment = Comment(
+            comment = request.comment.toString(),
+            author = request.author
+        )
+        return commentRepository.save(comment).toResponse()
     }
 
     @Transactional
     override fun updateComment(todocardId: Long, commentId: Long, request: UpdateCommentRequest): CommentResponse {
-        // TODO: 만약 todocardId, commentId에 해당하는 Comment가 없다면 throw ModelNotFoundException
-        /* TODO: DB에서 todocardId, commentId에 해당하는 Comment를 가져와서
-            request로 업데이트 후 DB에 저장, 결과를을 CommentResponse로 변환 후 반환 */
+        val todocard = todocardRepository.findByIdOrNull(todocardId) ?: throw ModelNotFoundException("todocard", todocardId)
+        val comment = commentRepository.findByIdOrNull(commentId) ?: throw ModelNotFoundException("Comment", commentId)
 
-        TODO("Not yet implemented")
+        comment.comment = request.comment
+
+        return commentRepository.save(comment).toResponse()
     }
 
     @Transactional
     override fun removeComment(todocardId: Long, commentId: Long) {
-        // TODO: 만약 todocardId에 해당하는 todocard가 없다면 throw ModelNotFoundException
-        // TODO: DB에서 todocardId, commentId에 해당하는 comment를 가져오고, 삭제
+        val todocard = todocardRepository.findByIdOrNull(todocardId) ?: throw ModelNotFoundException("todocard", todocardId)
+        val comment = commentRepository.findByIdOrNull(commentId) ?: throw ModelNotFoundException("Comment", commentId)
 
-        TODO("Not yet implemented")
+        commentRepository.delete(comment)
     }
 
 
@@ -117,13 +121,4 @@ class TodocardImpl(
 //    ㄴ조건을 충족하지 않는다면 기능 실패 응답하기
 
 
-
-
-//    @Transactional
-//    override fun applyCourse(courseId: Long, request: ApplyCourseRequest): CourseApplicationResponse {
-//        //만약 courseId에 해당하는 Course가 없다면 throw ModelNotFoundException
-//        //만약 course가 이미 마감됐다면, throw IllegalStateException
-//        //이미 신청했다면, throw IllegalStateException
-//
-//    }
 }

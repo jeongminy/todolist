@@ -14,14 +14,16 @@ class Comment(
     @Column(name="author")
     val author: String,
 
-    @ManyToOne
-    @JoinColumn(name="todocard_id")
-    var todocard: Todocard
 
 ){
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
+
+    @ManyToOne
+    @JoinColumn(name="todocard_id")
+    lateinit var todocard: Todocard
+
 }
 
 fun Comment.toResponse(): CommentResponse {
