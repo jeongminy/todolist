@@ -29,9 +29,9 @@ class GlobalExceptionHandler {
     //할 일을 작성하거나 수정할 때, 할일 제목이 1자 이상, 200자 이내인지 검사하고 아닐시 예외 처리 (step3-3미션)
     @ExceptionHandler(MethodArgumentNotValidException::class)
     fun handleMethodArgumentNotValidException(e: MethodArgumentNotValidException): ResponseEntity<ErrorResponse> {
-        val errors = e.bindingResult.allErrors.map { it.defaultMessage ?: "" }
-        val response = ErrorResponse("할일 제목은 1자 이상, 200자 이내로 작성해야 합니다.")
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response)
+        return ResponseEntity
+            .status(HttpStatus.BAD_REQUEST)
+            .body(ErrorResponse("할일 제목은 1자 이상, 200자 이내로 작성해야 합니다."))
     }
 
 }
