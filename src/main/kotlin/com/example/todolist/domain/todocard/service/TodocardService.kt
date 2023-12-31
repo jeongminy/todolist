@@ -2,6 +2,7 @@ package com.example.todolist.domain.todocard.service
 
 import com.example.todolist.domain.comment.dto.CommentResponse
 import com.example.todolist.domain.comment.dto.CreatCommentRequest
+import com.example.todolist.domain.comment.dto.DeleteCommentRequest
 import com.example.todolist.domain.comment.dto.UpdateCommentRequest
 import com.example.todolist.domain.todocard.dto.CreateTodocardRequest
 import com.example.todolist.domain.todocard.dto.TodocardResponse
@@ -9,7 +10,9 @@ import com.example.todolist.domain.todocard.dto.UpdateTodocardRequest
 
 interface TodocardService {
 
-    fun getAllTodocardList(): List<TodocardResponse>
+    fun getAllTodocardList(order:String): List<TodocardResponse>
+
+    fun getAllTodocardListByAuthor(author: String): List<TodocardResponse>
 
     fun getTodocardById(todocardId: Long): TodocardResponse
 
@@ -29,6 +32,6 @@ interface TodocardService {
 
     fun updateComment(todocardId: Long, commentId: Long, request: UpdateCommentRequest): CommentResponse
 
-    fun removeComment(todocardId: Long, commentId: Long)
+    fun removeComment(todocardId: Long, commentId: Long, request: DeleteCommentRequest)
 
 }

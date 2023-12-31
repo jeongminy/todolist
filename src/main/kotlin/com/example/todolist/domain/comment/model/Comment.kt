@@ -14,6 +14,9 @@ class Comment(
     @Column(name="author")
     val author: String,
 
+    @Column(name="comment_password")
+    val commentPassword: String
+
 
 ){
     @Id
