@@ -15,9 +15,9 @@ class Todocard(
     @Column(name="description")
     var description: String?,
 
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.STRING) //데이터베이스에 0, 1로 담기지 말고 "문자열" 형태로 저장 되도록!
     @Column(name="status")
-    var status: TodocardStatus,
+    var status: TodocardStatus ,
 
     @Column(name="created_time")
     val createdTime: LocalDateTime = LocalDateTime.now(),
@@ -28,7 +28,7 @@ class Todocard(
 ){
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY) //Id를 자동생성 해주도록 JPA에 위임함. 자동적으로 id가 1씩증가하며 생성됨.
     var id: Long? = null
 
 
