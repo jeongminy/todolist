@@ -9,7 +9,6 @@ data class CreateTodocardRequest(
     @field:NotBlank
     @field:Size(min = 1, max = 200)
     val title: String,
-
     val description: String?,
     val author: String,
 )
