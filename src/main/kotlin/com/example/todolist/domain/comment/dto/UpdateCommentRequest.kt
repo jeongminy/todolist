@@ -2,5 +2,5 @@ package com.example.todolist.domain.comment.dto
 
 data class UpdateCommentRequest(
     val comment: String,
-    val commentPassword: String
+    val enteredCommentPassword: String
 )

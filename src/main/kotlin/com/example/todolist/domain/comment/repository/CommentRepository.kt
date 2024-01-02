@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 interface CommentRepository: JpaRepository<Comment, Long> {
 
-    fun findByTodocardIdAndId(courseId: Long, lectureId: Long): Comment?
+//    fun findByTodocardIdAndId(courseId: Long, lectureId: Long): Comment?
 }

@@ -1,12 +1,5 @@
 package com.example.todolist.domain.todocard.service
 
-import com.example.todolist.domain.comment.dto.CommentResponse
-import com.example.todolist.domain.comment.dto.CreatCommentRequest
-import com.example.todolist.domain.comment.dto.DeleteCommentRequest
-import com.example.todolist.domain.comment.dto.UpdateCommentRequest
-import com.example.todolist.domain.comment.model.Comment
-import com.example.todolist.domain.comment.model.toResponse
-import com.example.todolist.domain.comment.repository.CommentRepository
 import com.example.todolist.domain.exception.ModelNotFoundException
 import com.example.todolist.domain.todocard.dto.CreateTodocardRequest
 import com.example.todolist.domain.todocard.dto.TodocardResponse
@@ -16,18 +9,14 @@ import com.example.todolist.domain.todocard.model.TodocardStatus
 import com.example.todolist.domain.todocard.model.toResponse
 import com.example.todolist.domain.todocard.repository.TodocardRepository
 import org.springframework.data.repository.findByIdOrNull
-import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
 
 @Service
 class TodocardServiceImpl(
-    private val todocardRepository: TodocardRepository,
-    private val commentRepository: CommentRepository,
-    private val encoder: PasswordEncoder
-): TodocardService{
-
+    private val todocardRepository: TodocardRepository
+): TodocardService {
 
     // 할 일 목록 api에 작성일을 기준으로 오름차순, 내림차순 정렬하는 기능을 추가하기 (step3-1미션)
     override fun getAllTodocardList(order: String): List<TodocardResponse> {
@@ -44,11 +33,9 @@ class TodocardServiceImpl(
     }
 
 
-
-
-
     override fun getTodocardById(todocardId: Long): TodocardResponse {
-        val todocard = todocardRepository.findByIdOrNull(todocardId) ?: throw ModelNotFoundException("todocard",todocardId)
+        val todocard =
+            todocardRepository.findByIdOrNull(todocardId) ?: throw ModelNotFoundException("todocard", todocardId)
         return todocard.toResponse()
         //throw ModelNotFoundException(modelName="Todocard", id = 1L)
     }
@@ -68,7 +55,8 @@ class TodocardServiceImpl(
 
     @Transactional
     override fun updateTodocard(todocardId: Long, request: UpdateTodocardRequest): TodocardResponse {
-        val todocard = todocardRepository.findByIdOrNull(todocardId) ?: throw ModelNotFoundException("todocard", todocardId)
+        val todocard =
+            todocardRepository.findByIdOrNull(todocardId) ?: throw ModelNotFoundException("todocard", todocardId)
 
         val (title, description, status) = request
 
@@ -81,66 +69,13 @@ class TodocardServiceImpl(
 
     @Transactional
     override fun deleteTodocard(todocardId: Long) {
-        val todocard = todocardRepository.findByIdOrNull(todocardId) ?: throw ModelNotFoundException("todocard", todocardId)
+        val todocard =
+            todocardRepository.findByIdOrNull(todocardId) ?: throw ModelNotFoundException("todocard", todocardId)
         todocardRepository.delete(todocard)
     }
 
-
-
-
-
-
-    override fun getCommentList(todocardId: Long): List<CommentResponse> {
-        val todocard = todocardRepository.findByIdOrNull(todocardId) ?: throw ModelNotFoundException("todocard", todocardId)
-        return todocard.comments.map {it.toResponse()}
-    }
-
-    override fun getComment(todocardId: Long, commentId: Long): CommentResponse {
-        val todocard = todocardRepository.findByIdOrNull(todocardId) ?: throw ModelNotFoundException("todocard", todocardId)
-        val comment = commentRepository.findByTodocardIdAndId(todocardId, commentId) ?: throw ModelNotFoundException("Comment", commentId)
-
-        return comment.toResponse()
-    }
-
-    @Transactional
-    override fun addComment(todocardId: Long, request: CreatCommentRequest): CommentResponse {
-        val todocard = todocardRepository.findByIdOrNull(todocardId) ?: throw ModelNotFoundException("todocard", todocardId)
-
-        val encodedPassword = encoder.encode(request.commentPassword)
-
-        val comment = Comment(
-            comment = request.comment.toString(),
-            author = request.author,
-            commentPassword = encodedPassword //댓글을 작성할 때 '작성자 이름'과 '비밀번호'를 함께 받기 (step2-2미션)
-        )
-        return commentRepository.save(comment).toResponse()
-    }
-
-    @Transactional
-    override fun updateComment(todocardId: Long, commentId: Long, request: UpdateCommentRequest): CommentResponse {
-        val todocard = todocardRepository.findByIdOrNull(todocardId) ?: throw ModelNotFoundException("todocard", todocardId)
-        val comment = commentRepository.findByIdOrNull(commentId) ?: throw ModelNotFoundException("Comment", commentId)
-
-        //작성자 이름과 비밀번호를 함께 받아 저장한 값과 일치하면 수정 가능 (step2-3미션)
-        if (!encoder.matches(request.commentPassword, comment.commentPassword)) {
-            throw IllegalArgumentException("댓글의 비밀번호가 일치하지 않습니다.")
-        } else {comment.comment = request.comment}
-
-
-        return commentRepository.save(comment).toResponse()
-    }
-
-    @Transactional
-    override fun removeComment(todocardId: Long, commentId: Long, request: DeleteCommentRequest) {
-        val todocard = todocardRepository.findByIdOrNull(todocardId) ?: throw ModelNotFoundException("todocard", todocardId)
-        val comment = commentRepository.findByIdOrNull(commentId) ?: throw ModelNotFoundException("Comment", commentId)
-
-        //작성자 이름과 비밀번호를 함께 받아 저장한 값과 일치하면 삭제 가능 (step2-4미션)
-        if (!encoder.matches(request.commentPassword, comment.commentPassword)) {
-            throw IllegalArgumentException("댓글의 비밀번호가 일치하지 않습니다.")
-        } else {commentRepository.delete(comment)}
-
-
-
-    }
 }
+
+
+
+

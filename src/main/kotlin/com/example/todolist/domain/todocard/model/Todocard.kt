@@ -25,19 +25,19 @@ class Todocard(
     @Column(name="author")
     val author: String,
 
+    @OneToMany(
+        fetch = FetchType.LAZY,
+        cascade = [CascadeType.ALL],
+        orphanRemoval = true)
+
+    @JoinColumn(name = "todocard_id")
+    var comments: MutableList<Comment> = mutableListOf()
+
 ){
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) //Id를 자동생성 해주도록 JPA에 위임함. 자동적으로 id가 1씩증가하며 생성됨.
     var id: Long? = null
-
-
-    @OneToMany(
-        mappedBy = "comment",
-        fetch = FetchType.LAZY,
-        cascade = [CascadeType.ALL],
-        orphanRemoval = true)
-    var comments: MutableList<Comment> = mutableListOf()
 
 
 
