@@ -9,10 +9,12 @@ import java.time.LocalDateTime
 @Table(name="todocard")
 class Todocard(
 
-    @Column(name="title")
+    //할 일을 작성하거나 수정할 때, 할일 제목이 1자 이상, 200자 이내인지 검사하고 아닐시 예외 처리 (step3-3미션)
+    @Column(name="title", length = 200, nullable = false)
     var title: String,
 
-    @Column(name="description")
+    //할 일 본문이 1자 이상 1000자 이하인지 검사하기 (step3-3미션)
+    @Column(name="description", length = 1000)
     var description: String?,
 
     @Enumerated(EnumType.STRING) //데이터베이스에 0, 1로 담기지 말고 "문자열" 형태로 저장 되도록!
