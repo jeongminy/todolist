@@ -27,7 +27,7 @@ class UserServiceImpl(
                 email = request.email,
                 password = request.password,
                 profile = Profile(
-                    nickname = request.nickname),
+                nickname = request.nickname),
                 )
         ).toResponse()
     }
