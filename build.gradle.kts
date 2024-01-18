@@ -40,6 +40,12 @@ dependencies {
 
     runtimeOnly("org.postgresql:postgresql") //postgresql DB driver 설치
 
+    implementation("org.springframework.boot:spring-boot-starter-security") //Spring Security
+    implementation("io.jsonwebtoken:jjwt-api:0.12.3") //JWT
+
+    runtimeOnly("io.jsonwebtoken:jjwt-impl:0.12.3") //JWT
+    runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.12.3") //JWT
+
 }
 
 tasks.withType<KotlinCompile> {
