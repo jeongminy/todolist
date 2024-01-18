@@ -33,6 +33,7 @@ dependencies {
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0") //swager
     implementation("org.springframework.boot:spring-boot-starter-data-jpa") //@Transactional 어노테이션을 사용하기 위해 JPA는 지금은 단순히, Database와 통신하기 위한 library라고 이해
     // implementation("com.h2database:h2") //DB 임시 저장소
+    implementation("org.springframework.boot:spring-boot-starter-aop") //AOP
 
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
