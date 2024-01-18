@@ -1,10 +1,10 @@
 package com.example.todolist.domain.user.service
 
-import com.example.todolist.domain.user.dto.SignUpRequest
-import com.example.todolist.domain.user.dto.UpdateUserProfileRequest
-import com.example.todolist.domain.user.dto.UserResponse
+import com.example.todolist.domain.user.dto.*
 
 interface UserService {
+
+    fun login(request: LoginRequest): LoginResponse
 
     fun signup(request:SignUpRequest): UserResponse
 

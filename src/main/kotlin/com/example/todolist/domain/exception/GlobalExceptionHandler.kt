@@ -1,6 +1,7 @@
 package com.example.todolist.domain.exception
 
 import com.example.todolist.domain.exception.dto.ErrorResponse
+import com.example.todolist.domain.user.exception.InvalidCredentialException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.MethodArgumentNotValidException
@@ -32,6 +33,13 @@ class GlobalExceptionHandler {
         return ResponseEntity
             .status(HttpStatus.BAD_REQUEST)
             .body(ErrorResponse("할일 제목은 1자 이상, 200자 이내로 작성해야 합니다."))
+    }
+
+    @ExceptionHandler(InvalidCredentialException::class)
+    fun handleInvalidCredentialException(e: InvalidCredentialException): ResponseEntity<ErrorResponse>{
+        return ResponseEntity
+            .status(HttpStatus.UNAUTHORIZED)
+            .body(ErrorResponse(e.message))
     }
 
 

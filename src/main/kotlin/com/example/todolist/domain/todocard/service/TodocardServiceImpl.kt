@@ -19,7 +19,7 @@ class TodocardServiceImpl(
     private val todocardRepository: TodocardRepository //인터페이스를 사용하는 의존성 주입입니다. 이를 통해 데이터베이스에서 할 일 카드와 관련된 작업을 수행할 수 있습니다.
 ): TodocardService { //TodocardService 인터페이스를 구현합니다.
 
-    // 할 일 목록 api에 작성일을 기준으로 오름차순, 내림차순 정렬하는 기능을 추가하기 (step3-1미션)
+    // 할 일 목록 api에 작성일을 기준으로 오름차순, 내림차순 정렬하는 기능을 추가하기
     override fun getAllTodocardList(order: String): List<TodocardResponse> { //TodocardService 인터페이스의 getAllTodocardList 메서드를 구현한 것
         return if (order.toUpperCase() == "ASC") {
             //컨트롤러를 통해 order 파라미터를 전달 받아와서 주어진 정렬 방식이 대문자로 "ASC"인지 확인하는 조건문입니다
@@ -31,7 +31,7 @@ class TodocardServiceImpl(
         }
     }
 
-    //할 일 목록 api에 작성자(이름을 포함하는)를 기준으로 필터하는 기능을 추가하기 (step3-2미션)
+    //할 일 목록 api에 작성자(이름을 포함하는)를 기준으로 필터하는 기능을 추가하기
     override fun getAllTodocardListByAuthor(author: String): List<TodocardResponse> {
         return todocardRepository.findByAuthor("%author%").map { it.toResponse() }
     }
@@ -50,7 +50,7 @@ class TodocardServiceImpl(
             Todocard(
                 title = request.title,
                 description = request.description,
-                status = TodocardStatus.UNCOMPLETE, //댓글의 완료여부를 만들고, 기본값을 FALSE로 설정함 (step2-1미션)
+                status = TodocardStatus.UNCOMPLETE, //댓글의 완료여부를 만들고, 기본값을 FALSE로 설정함
                 createdTime = LocalDateTime.now(),
                 author = request.author
             )

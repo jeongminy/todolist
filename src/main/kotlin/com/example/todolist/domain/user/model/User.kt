@@ -2,6 +2,7 @@ package com.example.todolist.domain.user.model
 
 import com.example.todolist.domain.user.dto.UserResponse
 import jakarta.persistence.*
+import org.springframework.data.jpa.domain.AbstractPersistable_.id
 
 @Entity
 @Table(name="app_user")
@@ -14,7 +15,11 @@ class User(
     val password: String,
 
     @Embedded
-    var profile: Profile
+    var profile: Profile,
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role", nullable = false)
+    val role: UserRole
 
 ){
 
@@ -29,5 +34,6 @@ fun User.toResponse(): UserResponse {
         id = id!!,
         nickname = profile.nickname,
         email = email,
+        role = role.name
     )
 }
