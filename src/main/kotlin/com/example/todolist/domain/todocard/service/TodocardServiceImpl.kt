@@ -67,7 +67,7 @@ class TodocardServiceImpl(
         todocard.description = description
         todocard.status = status
 
-        return todocardRepository.save(todocard).toResponse()
+        return todocard.toResponse()
     }
 
     @Transactional
